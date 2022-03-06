@@ -1,19 +1,18 @@
 
 
-const dna = ["ATGCGA","CAGTGC","TTATGT","AGAAGG","CCCCTA","TCACTG"];
+const dna = ["ATGCGA","CATTGC","TTATGT","AGAATG","CCCCTA","TCACTG"];
 //const dna = [ 'ATGCGA' ];
 const filas = dna.length ;
 const columnas = dna[0].length ;
 console.log(`col:${columnas} -- filas:${filas}`);
 
 let numMutantes = 0;
-let newarray = [];
-
-// busqueda oblicua por izquierda
+// busqueda oblicua por izquierda - inferior
 let pos_ini = filas -4;
 //console.log('pi '+ dna);
 let fila_pos=0;
 let columna_sec = columnas;
+let numMutantes = 0;
 
 while (fila_pos <= pos_ini) {
     fila_sec = fila_pos;
@@ -29,33 +28,13 @@ while (fila_pos <= pos_ini) {
     }
     console.log(cadena);
     
-    const arrayFila = cadena.split('');
-    console.log('matriz ' , arrayFila);
-    let repeticiones = 0;
-    let letra = "";
-
-    arrayFila.map((c)=>{
-        console.log(c);
-        if(c==letra){
-            repeticiones++;
-        } else {
-            letra =c;
-        };
-    });
-    console.log(repeticiones)
-
-    if(repeticiones >= 3){
-        numMutantes++;     
-    }
+    numMutantes += validaRepetidos(cadena);
     
-    console.log('numero secuencias mutantes D: ' + numMutantes);
-    cadena=''
+    console.log('numero secuencias mutantes D IZQ INF: ' + numMutantes);
+    cadena='';
 
     columna_sec--;
     fila_pos++;
 };
 
-
-
-
-
+console.log(numMutantes);
