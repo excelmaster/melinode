@@ -11,29 +11,34 @@ function isMutant(dna){
 
     while (salir == false) {
         console.log('ciclo: ' + ciclo);
+        let cantidad =0;
+
         switch (ciclo) {
             case 0: // repetidos vertical
                 if(filas >=4){
-                    numMutaciones = findMutantV(dnaTxt);
-                    resultado += ` - ${numMutaciones} cadena(s) verticale(s) \n`;
+                    cantidad = findMutantV(dnaTxt);
+                    resultado += ` - ${cantidad} cadena(s) vertical(es) \n`;
+                    numMutaciones = cantidad;
                 }                
                 break;
             case 1: // repetidos horizontal
                 if(columnas >=4){
-                    numMutaciones += findMutantH(dnaTxt);    
-                    resultado += ` - ${numMutaciones} cadena(s) horizontale(s) \n`;
+                    cantidad = findMutantH(dnaTxt);    
+                    resultado += ` - ${cantidad} cadena(s) horizontal(es) \n`;
+                    numMutaciones += cantidad;
                 }                
                 break;
             case 2: // repetidos diagonal
                 console.log(`col ${columnas} fila ${filas}`);
                 if(columnas >=4 && filas >=4){
-                    numMutaciones += findMutantD(dnaTxt);    
-                    resultado += ` - ${numMutaciones} cadena(s) diagonal(es) \n`;
+                    cantidad = findMutantD(dnaTxt);    
+                    resultado += ` - ${cantidad} cadena(s) diagonal(es) \n`;
+                    numMutaciones += cantidad
                 }                
                 break;
         };
 
-        if (numMutaciones > 2 || ciclo >2){
+        if (numMutaciones > 1 || ciclo >2){
             salir = true;
         }
         ciclo++;
@@ -88,26 +93,8 @@ function findMutantV(dna){
         for (let j = 0; j < dna.length; j++) {
             cadena += dna[j][i];
         }
-        //console.log(cadena);
-        
-        const arrayFila = cadena.split('');
-            //console.log('matriz ' , arrayFila);
-            let repeticiones = 0;
-            let letra = "";
 
-            arrayFila.map((c)=>{
-                console.log(c);
-                if(c==letra){
-                    repeticiones++;
-                } else {
-                    letra =c;
-                };
-            });
-            //console.log(repeticiones)
-
-            if(repeticiones >= 3){
-                numMutantes++;     
-            }
+        numMutantes += validaRepetidos(cadena);
             
         //console.log('numero secuencias mutantes V: ' + numMutantes);
         cadena=''
@@ -126,6 +113,7 @@ function findMutantD(dna){
 
     numMutantes =  valida_izq_inferior(dna, filas, columnas);
     numMutantes += valida_izq_superior(dna, filas, columnas);
+    numMutantes += valida_der_inferior(dna, filas, columnas);
     
     return numMutantes;
 };
@@ -133,9 +121,9 @@ function findMutantD(dna){
 function  valida_izq_inferior(dna, filas, columnas){
     // busqueda oblicua por izquierda - inferior
     let pos_ini = filas -4;
-    //console.log('pi '+ dna);
+    console.log('pi '+ pos_ini);
     let fila_pos=0;
-    let columna_sec = columnas;
+    let columna_sec = filas;
     let numMutantes = 0;
 
     while (fila_pos <= pos_ini) {
@@ -171,7 +159,7 @@ function valida_izq_superior(dna,filas,columnas){
     pos_ini = filas -4;
     //console.log('pi '+ dna);
     fila_pos=0;
-    columna_sec = columnas;
+    columna_sec = filas;
     let numMutantes = 0;
 
     while (fila_pos <= pos_ini) {
@@ -200,39 +188,41 @@ function valida_izq_superior(dna,filas,columnas){
     return numMutantes;
 };
 
-function  valida_der_inferior(dna, filas, columnas){
-    // busqueda oblicua por izquierda - inferior
+function  valida_der_inferior(dna,filas,columnas){
+
+    // busqueda oblicua por derecha - inferior
     let pos_ini = filas -4;
     //console.log('pi '+ dna);
     let fila_pos=0;
-    let columna_sec = columnas;
+    let columna_sec = columnas-1;
     let numMutantes = 0;
 
     while (fila_pos <= pos_ini) {
         fila_sec = fila_pos;
-        console.log(`fila_pos: ${fila_pos}`);
+        //console.log(`fila_pos: ${fila_pos}`);
         //columna inicial
         let cadena ='';
         console.log(`col sec ${columna_sec} en fila_pos ${fila_pos}`);
+        console.log(columna_sec-1);
 
-        for (let i = 0; i < columna_sec; i++) {
+        for (let i = columnas-1; i >= fila_pos ; i--) {
             console.log(`fila_pos: ${fila_sec} col: ${i} :: ${dna[fila_sec][i]}`);
             cadena += dna[fila_sec][i];
-            fila_sec++;
+            fila_sec++; 
         }
         console.log(cadena);
         
         numMutantes += validaRepetidos(cadena);
         
-        console.log('numero secuencias mutantes D IZQ INF: ' + numMutantes);
+        console.log('numero secuencias mutantes D Der INF: ' + numMutantes);
         cadena='';
 
         columna_sec--;
-        fila_pos++;
+        fila_pos++; 
     };
 
     return numMutantes;
-
+    
 };
 
 function validaRepetidos(cadena){
