@@ -1,42 +1,47 @@
 
-function  valida_der_inferior(){
-    const dna = ["ATGCGA","CATTGC","TTATGC","CCCCCC","CCCCCC","CCCCCC"];
+
+function valida_der_superior(dna,filas,columnas){
+    dna = ["ATGCGAta","CATTGCcg","TCATGTgc","AGCATGca","CCCCGCcc","TCACCGgg","AGACGGca","AGAAGGca"];
     //const dna = [ 'ATGCGA' ];
-    const filas = dna.length ;
-    const columnas = dna[0].length ;
+    filas = dna.length ;
+    columnas = dna[0].length ;
     console.log(`col:${columnas} -- filas:${filas}`);
 
-    // busqueda oblicua por derecha - inferior
-    let pos_ini = filas -4;
+    // busqueda oblicua por izquierda - superior
+    console.log('superior');
+    pos_ini = columnas -4;
     //console.log('pi '+ dna);
-    let fila_pos=0;
-    let columna_sec = columnas-1;
+    fila_pos=0;
+    columna_sec = columnas-2;
     let numMutantes = 0;
 
-    while (fila_pos <= pos_ini) {
-        fila_sec = fila_pos;
-        //console.log(`fila_pos: ${fila_pos}`);
+    while (fila_pos < pos_ini) {
+        console.log('--------------------------------');
+        fila_sec = 0;
+        console.log(`fila_pos: ${fila_pos}`);
+        console.log(`pos_ini: ${pos_ini}`);
+        
         //columna inicial
-        let cadena ='';
-        console.log(`col sec ${columna_sec} en fila_pos ${fila_pos}`);
-        console.log(columna_sec-1);
+         let cadena ='';
+        console.log(`col sec ${columna_sec} en fila_pos ${fila_sec}`);
 
-        for (let i = columnas-1; i >= fila_pos ; i--) {
-            console.log(`fila_pos: ${fila_sec} col: ${i} :: ${dna[fila_sec][i]}`);
-            cadena += dna[fila_sec][i];
-            fila_sec++; 
-        }
+        for (let i = 0 ; i <= columna_sec; i++) {
+            console.log(`fila_pos: ${fila_sec} col: ${columna_sec -i} :: ${dna[fila_sec][columna_sec -i]}`);
+            cadena += dna[fila_sec][columna_sec -i];
+            fila_sec++;
+        };
+
         console.log(cadena);
+        numMutantes += validaRepetidos(cadena.toUpperCase());
         
-        numMutantes += validaRepetidos(cadena);
-        
-        console.log('numero secuencias mutantes D IZQ INF: ' + numMutantes);
-        cadena='';
+        console.log('numero secuencias mutantes D DER SUP: ' + numMutantes); 
+        cadena=''
 
         columna_sec--;
-        fila_pos++; 
+        fila_pos++;
     };
-    
+
+    return numMutantes;
 };
 
 function validaRepetidos(cadena){
@@ -62,4 +67,4 @@ function validaRepetidos(cadena){
     };
 };
 
-valida_der_inferior();
+valida_der_superior();
