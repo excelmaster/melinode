@@ -1,52 +1,66 @@
 function isMutant(dna){
     console.log('dna desde ismutant' + dna);
     const dnaTxt = crear_array(dna);
-    let numMutaciones = 0;
-    let salir = false;
-    let ciclo = 0;
-    let resultado  ='';
-    const filas = dnaTxt.length ;
-    const columnas = dnaTxt[0].length;
-    console.log(`filas:${filas} -- col:${columnas}`);
+    console.log('txt: ' + dnaTxt);
+    //verificar si hay letras diferentes en el json enviado
+    let diff = "";
+    diff = charDiff(dnaTxt);
+    console.log(`diff: ${diff.length}`);
 
-    while (salir == false) {
-        console.log('ciclo: ' + ciclo);
-        let cantidad =0;
+    if(diff.length == 0){ 
+        let numMutaciones = 0;
+        let salir = false;
+        let ciclo = 0;
+        let resultado  ='';
+        const filas = dnaTxt.length ;
+        const columnas = dnaTxt[0].length;
+        console.log(`filas:${filas} -- col:${columnas}`);
 
-        switch (ciclo) {
-            case 0: // repetidos vertical
-                if(filas >=4){
-                    cantidad = findMutantV(dnaTxt);
-                    resultado += ` - ${cantidad} cadena(s) vertical(es) \n`;
-                    numMutaciones = cantidad;
-                }                
-                break;
-            case 1: // repetidos horizontal
-                if(columnas >=4){
-                    cantidad = findMutantH(dnaTxt);    
-                    resultado += ` - ${cantidad} cadena(s) horizontal(es) \n`;
-                    numMutaciones += cantidad;
-                }                
-                break;
-            case 2: // repetidos diagonal
-                console.log(`col ${columnas} fila ${filas}`);
-                if(columnas >=4 && filas >=4){
-                    cantidad = findMutantD(dnaTxt);    
-                    resultado += ` - ${cantidad} cadena(s) diagonal(es) \n`;
-                    numMutaciones += cantidad;
-                }                
-                break;
+        while (salir == false) {
+            console.log('ciclo: ' + ciclo);
+            let cantidad =0;
+
+            switch (ciclo) {
+                case 0: // repetidos vertical
+                    if(filas >=4){
+                        cantidad = findMutantV(dnaTxt);
+                        resultado += ` - ${cantidad} cadena(s) vertical(es) \n`;
+                        numMutaciones = cantidad;
+                    }                
+                    break;
+                case 1: // repetidos horizontal
+                    if(columnas >=4){
+                        cantidad = findMutantH(dnaTxt); 
+                        console.log('cantidad desde bloque: ' + cantidad);   
+                        resultado += ` - ${cantidad} cadena(s) horizontal(es) \n`;
+                        numMutaciones += cantidad;
+                    }                
+                    break;
+                case 2: // repetidos diagonal
+                    console.log(`col ${columnas} fila ${filas}`);
+                    if(columnas >=4 && filas >=4){
+                        cantidad = findMutantD(dnaTxt);    
+                        resultado += ` - ${cantidad} cadena(s) diagonal(es) \n`;
+                        numMutaciones += cantidad;
+                    }                
+                    break;
+            };
+
+            if (numMutaciones > 1 || ciclo >2){
+                salir = true;
+            }
+            ciclo++;
         };
 
-        if (numMutaciones > 1 || ciclo >2){
-            salir = true;
-        }
-        ciclo++;
+        console.log(dnaTxt); 
+        const resMutante = [numMutaciones, resultado,dnaTxt]; 
+        console.log('salida: ' + resMutante);
+        return resMutante;   
+    } else {
+        const resMutante = [-1, diff, dnaTxt];
+        return resMutante;   
     };
-
-    console.log(dnaTxt); 
-    const resMutante = [numMutaciones, resultado]; 
-    return resMutante;  
+     
 };
 
 function crear_array(dna){
@@ -76,7 +90,7 @@ function findMutantV(dna){
 
     for (let i = 0; i < dna[0].length; i++) {
         for (let j = 0; j < dna.length; j++) {
-            cadena += dna[j][i].toupperCase;
+            cadena += dna[j][i];
         }
         console.log(`cadena Vertical: ${cadena}`);
         numMutantes += validaRepetidos(cadena);
@@ -273,6 +287,8 @@ function validaRepetidos(cadena){
             repeticiones=0;
         };
     });
+
+    if(repeticiones==3){ contador++;};
     console.log(`contador: ${contador}`);
 
     if(contador > 0 ){
@@ -282,4 +298,15 @@ function validaRepetidos(cadena){
     };
 };
 
-module.exports = isMutant;
+function charDiff(dna){
+    let cadenaRgx =  /[^ATGC,]/g;
+    const unicos = [...new Set(dna.toString().toUpperCase())].join("");
+    let strNoValido = unicos.match(cadenaRgx);
+    console.log(strNoValido);
+    return (strNoValido === null) ? "" : strNoValido;
+};
+
+
+
+module.exports.isMutant = isMutant;
+

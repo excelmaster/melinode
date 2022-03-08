@@ -1,0 +1,15 @@
+{
+    "intentos": [{
+        "dna": "ATGCGAta,ATgGCcga,AgTGTgc,gGCATGca,CCCCGCcc,ACACCGgg,AGACGGca,AGACGGca",
+        "estado": "Mutante",
+        "cantidad": 5
+    }, {
+        "dna": "AAA,CAA,CA,CGA,CCC,TCA",
+        "estado": "No mutante",
+        "cantidad": 5
+    }, {
+        "dna": "AATA,CCCC",
+        "estado": "No mutante",
+        "cantidad": 7
+    }]
+}
