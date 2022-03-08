@@ -4,10 +4,6 @@ const app = require('../app')
 const mt = require('../controllers/mutant_ctl');
 const archivo = require('../controllers/json_ctl');
 
-router.get('/', (req,res)=>{
-    res.render("mutant_ui.ejs");
-});
-
 router.post('/mutant', (req, res) =>{
     console.log('mutante');
     const dna =  req.body;
